@@ -26,7 +26,7 @@ html-compare-rs = "0.1.0"
 ## Quick Start
 
 ```rust
-use html_compare::{assert_html_eq, HtmlCompareOptions};
+use html_compare_rs::{assert_html_eq, HtmlCompareOptions};
 
 // Basic comparison
 assert_html_eq!(
@@ -53,7 +53,7 @@ assert_html_eq!(
 The library provides both a programmatic API and test assertions:
 
 ```rust
-use html_compare::{HtmlComparer, assert_html_eq};
+use html_compare_rs::{HtmlComparer, assert_html_eq};
 
 // Using the assertion macro (recommended for tests)
 assert_html_eq!(
@@ -74,7 +74,7 @@ assert!(comparer.compare(
 Control how HTML is compared with `HtmlCompareOptions`:
 
 ```rust
-use html_compare::{HtmlCompareOptions, assert_html_eq};
+use html_compare_rs::{HtmlCompareOptions, assert_html_eq};
 
 let options = HtmlCompareOptions {
     // Ignore whitespace between elements (default: true)
@@ -107,7 +107,7 @@ assert_html_eq!(
 Common comparison configurations are available as presets:
 
 ```rust
-use html_compare::{assert_html_eq, presets};
+use html_compare_rs::{assert_html_eq, presets};
 
 // Relaxed comparison - ignores formatting, attributes, and order
 assert_html_eq!(
@@ -155,7 +155,7 @@ assert_html_eq!(
 When comparisons fail, detailed error messages help identify the differences:
 
 ```rust
-use html_compare::assert_html_eq;
+use html_compare_rs::assert_html_eq;
 
 // This will panic with a detailed error message:
 assert_html_eq!(

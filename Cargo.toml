@@ -1,0 +1,18 @@
+[package]
+name = "html-compare-rs"
+version = "0.1.0"
+edition = "2021"
+description = "A library for comparing HTML with configurable comparison options"
+license = "MIT"
+repository = "https://github.com/systemsoverload/html-compare-rs"
+documentation = "https://docs.rs/html-compare-rs"
+readme = "README.md"
+keywords = ["html", "testing", "comparison", "assert", "diff"]
+categories = ["development-tools::testing", "web-programming", "text-processing"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ego-tree = "0.9.0"
+scraper = "0.21.0"
+thiserror = "2.0.3"

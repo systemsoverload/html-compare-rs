@@ -1,6 +1,6 @@
 # html-compare-rs
 
-[![Build Status](https://github.com/[owner]/html-compare-rs/actions/workflows/build.yml/badge.svg)](https://github.com/[owner]/html-compare-rs/actions/workflows/build.yml)
+[![Build Status](https://github.com/systemsoverload/html-compare-rs/actions/workflows/build.yml/badge.svg)](https://github.com/systemsoverload/html-compare-rs/actions/workflows/build.yml)
 [![Crates.io](https://img.shields.io/crates/v/html-compare-rs.svg)](https://crates.io/crates/html-compare-rs)
 [![Downloads](https://img.shields.io/crates/d/html-compare-rs.svg)](https://crates.io/crates/html-compare-rs)
 

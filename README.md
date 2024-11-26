@@ -1,5 +1,9 @@
 # html-compare-rs
 
+[![Build Status](https://github.com/[owner]/html-compare-rs/actions/workflows/build.yml/badge.svg)](https://github.com/[owner]/html-compare-rs/actions/workflows/build.yml)
+[![Crates.io](https://img.shields.io/crates/v/html-compare-rs.svg)](https://crates.io/crates/html-compare-rs)
+[![Downloads](https://img.shields.io/crates/d/html-compare-rs.svg)](https://crates.io/crates/html-compare-rs)
+
 A Rust library for comparing HTML content with configurable comparison options. Useful for testing HTML output while ignoring differences that don't affect the rendered result.
 
 ## Features

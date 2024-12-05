@@ -141,6 +141,8 @@ pub struct HtmlCompareOptions {
     pub ignore_comments: bool,
     /// Ignore order of sibling elements
     pub ignore_sibling_order: bool,
+    /// Ignore contents of <style> blocks
+    pub ignore_style_contents: bool,
 }
 
 impl Default for HtmlCompareOptions {
@@ -152,6 +154,7 @@ impl Default for HtmlCompareOptions {
             ignore_text: false,
             ignore_comments: true,
             ignore_sibling_order: false,
+            ignore_style_contents: false,
         }
     }
 }
@@ -228,6 +231,12 @@ impl HtmlComparer {
         // Compare attributes if not ignored
         if !self.options.ignore_attributes {
             self.compare_attributes(expected, actual)?;
+        }
+
+        // Special handling for style tags if ignore_style_contents is true
+        if self.options.ignore_style_contents && expected.value().name() == "style" {
+            // When ignoring style contents, we only compare the tag existence
+            return Ok(());
         }
 
         // Get child nodes
@@ -439,6 +448,7 @@ pub mod presets {
             ignore_text: false,
             ignore_comments: true,
             ignore_sibling_order: true,
+            ignore_style_contents: true,
         }
     }
 
@@ -451,6 +461,7 @@ pub mod presets {
             ignore_text: false,
             ignore_comments: false,
             ignore_sibling_order: false,
+            ignore_style_contents: false,
         }
     }
 
@@ -467,6 +478,7 @@ pub mod presets {
             ignore_text: false,
             ignore_comments: true,
             ignore_sibling_order: false,
+            ignore_style_contents: true,
         }
     }
 }
@@ -958,5 +970,80 @@ mod tests {
         if let Err(e) = result {
             println!("Actual parser behavior for mismatched tags: {}", e);
         }
+    }
+    #[test]
+    fn test_style_block_handling() {
+        // Test that style contents are compared by default
+        assert_html_ne!(
+            "<style>body { color: red; }</style>",
+            "<style>body { color: blue; }</style>"
+        );
+
+        // Test ignoring style contents
+        let ignore_style = HtmlCompareOptions {
+            ignore_style_contents: true,
+            ..Default::default()
+        };
+
+        assert_html_eq!(
+            "<style>body { color: red; }</style>",
+            "<style>body { color: blue; }</style>",
+            ignore_style.clone()
+        );
+
+        assert_html_eq!(
+            "<style>\n  body { color: red; }\n  .class { font-size: 12px; }\n</style>",
+            "<style>body{background:white}</style>",
+            ignore_style.clone()
+        );
+
+        // Test multiple style blocks
+        assert_html_eq!(
+            "<div><style>body{color:red}</style><p>Text</p><style>.class{margin:0}</style></div>",
+            "<div><style>body{color:blue}</style><p>Text</p><style>.other{padding:10px}</style></div>",
+            ignore_style.clone()
+        );
+
+        // Test empty style blocks
+        assert_html_eq!(
+            "<style></style>",
+            "<style>body { color: blue; }</style>",
+            ignore_style.clone()
+        );
+
+        // Test that other aspects still work with style ignoring
+        assert_html_eq!(
+            "<div class='test'><style>body{color:red}</style><p>Text</p></div>",
+            "<div class='test'><style>body{color:blue}</style><p>Text</p></div>",
+            ignore_style
+        );
+    }
+
+    #[test]
+    fn test_style_block_with_attributes() {
+        let ignore_style = HtmlCompareOptions {
+            ignore_style_contents: true,
+            ..Default::default()
+        };
+
+        // Test that attributes are still compared when ignore_style_contents is true
+        assert_html_ne!(
+            "<style type='text/css'>body{color:red}</style>",
+            "<style>body{color:blue}</style>",
+            ignore_style.clone()
+        );
+
+        // Test with both ignore_attributes and ignore_style_contents
+        let ignore_both = HtmlCompareOptions {
+            ignore_style_contents: true,
+            ignore_attributes: true,
+            ..Default::default()
+        };
+
+        assert_html_eq!(
+            "<style type='text/css'>body{color:red}</style>",
+            "<style>body{color:blue}</style>",
+            ignore_both
+        );
     }
 }
